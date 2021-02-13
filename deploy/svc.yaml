@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2021-02-13T11:22:08Z"
+  labels:
+    app: admission-registry
+  name: webhook-example-svc
+  namespace: default
+spec:
+  ports:
+  - port: 443
+    protocol: TCP
+    targetPort: 443
+  selector:
+    app: admission-registry
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
