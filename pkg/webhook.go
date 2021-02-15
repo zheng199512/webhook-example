@@ -60,7 +60,7 @@ func (s WebhookServer) Handler(writer http.ResponseWriter, request *http.Request
 	// 校验 content-type
 
 	contentType := request.Header.Get("Content-Type")
-	if contentType != "applcation/json" {
+	if contentType != "application/json" {
 		klog.Errorf("content-type is %s ,but expect application/json", contentType)
 		http.Error(writer, "content-type invalid,expect application/json", http.StatusBadRequest)
 		return
@@ -262,7 +262,7 @@ func (s WebhookServer) validate(a *admissionv1.AdmissionReview) *admissionv1.Adm
 	klog.Info("admission review for  kind %s namespace %s uid $s", req.Kind.Kind, req.Namespace, req.UID)
 
 	var pod corev1.Pod
-	if err := json.Unmarshal(req.Object.Raw, pod); err != nil {
+	if err := json.Unmarshal(req.Object.Raw, &pod); err != nil {
 		klog.Errorf("cant unmarshal object raw %v", err)
 		allowed = false
 		code = http.StatusBadRequest
@@ -280,7 +280,7 @@ func (s WebhookServer) validate(a *admissionv1.AdmissionReview) *admissionv1.Adm
 		var whilelisted = false
 
 		for _, reg := range s.WhiteListRegistries {
-			if strings.HasSuffix(container.Image, reg) {
+			if strings.HasPrefix(container.Image, reg) {
 				whilelisted = true
 			}
 

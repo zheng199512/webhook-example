@@ -19,8 +19,10 @@ func main() {
 	var param pkg.WhSvrParam
 
 	flag.IntVar(&param.Port, "port", 443, "webhook start port")
-	flag.StringVar(&param.CertFile, "tls certfile", "/etc/webhook/certs/tls.crt", "file containing the x509 certficate for https")
-	flag.StringVar(&param.KeyFile, "tls key", "/etc/webhook/certs/tls.key", "file containing the x509 certficate key file")
+	flag.StringVar(&param.CertFile, "tlscertfile", "/etc/webhook/certs/tls.crt", "file containing the x509 certficate for https")
+	flag.StringVar(&param.KeyFile, "tlskeyfile", "/etc/webhook/certs/tls.key", "file containing the x509 certficate key file")
+
+	flag.Parse()
 
 	klog.Info(fmt.Sprintf("port=%d,cert=%s,key=%s", param.Port, param.CertFile, param.KeyFile))
 
@@ -41,6 +43,7 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/validate", whsvr.Handler)
 	mux.HandleFunc("/mutate", whsvr.Handler)
+	whsvr.Server.Handler = mux
 
 	go func() {
 		if err := whsvr.Server.ListenAndServeTLS("", ""); err != nil {
