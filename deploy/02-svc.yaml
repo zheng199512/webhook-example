@@ -3,8 +3,8 @@ kind: Service
 metadata:
   labels:
     app: admission-registry
-  name: webhook-example-svc
-  namespace: default
+  name: webhook
+  namespace: zhenghongfei
 spec:
   ports:
   - port: 443

@@ -154,6 +154,19 @@ func (s WebhookServer) mutate(a *admissionv1.AdmissionReview) *admissionv1.Admis
 		}
 		objectMeta = &service.ObjectMeta
 
+	case "Pod":
+		var pod corev1.Pod
+		if err := json.Unmarshal(req.Object.Raw,&pod);err !=nil{
+			klog.Errorf("canot unnmarshal raw object :%v",err)
+			return &admissionv1.AdmissionResponse{
+				Result: &metav1.Status{
+					Code:    http.StatusBadRequest,
+					Message: err.Error(),
+				},
+			}
+		}
+		objectMeta = &pod.ObjectMeta
+
 	default:
 		return &admissionv1.AdmissionResponse{
 			Result: &metav1.Status{
@@ -202,8 +215,6 @@ func (s WebhookServer) mutate(a *admissionv1.AdmissionReview) *admissionv1.Admis
 
 func mutateAnnotations(target map[string]string, added map[string]string) (patch []patchOperation) {
 	for key, value := range added {
-		if target == nil || target[key] == "" {
-			target = map[string]string{}
 			patch = append(patch, patchOperation{
 				Op:   "add",
 				Path: "/metadata/annotations",
@@ -211,13 +222,22 @@ func mutateAnnotations(target map[string]string, added map[string]string) (patch
 					key: value,
 				},
 			})
-		} else {
-			patch = append(patch, patchOperation{
-				Op:    "replace",
-				Path:  "/metadata/annotations/" + key,
-				Value: value,
-			})
-		}
+		//if target == nil || target[key] == "" {
+		//	target = map[string]string{}
+		//	patch = append(patch, patchOperation{
+		//		Op:   "add",
+		//		Path: "/metadata/annotations",
+		//		Value: map[string]string{
+		//			key: value,
+		//		},
+		//	})
+		//} else {
+		//	patch = append(patch, patchOperation{
+		//		Op:    "replace",
+		//		Path:  "/metadata/annotations/" + key,
+		//		Value: value,
+		//	})
+		//}
 
 	}
 	return
