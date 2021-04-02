@@ -214,32 +214,33 @@ func (s WebhookServer) mutate(a *admissionv1.AdmissionReview) *admissionv1.Admis
 }
 
 func mutateAnnotations(target map[string]string, added map[string]string) (patch []patchOperation) {
-	for key, value := range added {
+	//for key, value := range added {
+			//patch = append(patch, patchOperation{
+			//	Op:   "add",
+			//	Path: "/metadata/annotations",
+			//	Value: map[string]string{
+			//		key: value,
+			//	},
+			//})
+		if target == nil {
+			target = map[string]string{}
 			patch = append(patch, patchOperation{
 				Op:   "add",
 				Path: "/metadata/annotations",
-				Value: map[string]string{
-					key: value,
-				},
+				Value: added,
 			})
-		//if target == nil || target[key] == "" {
-		//	target = map[string]string{}
-		//	patch = append(patch, patchOperation{
-		//		Op:   "add",
-		//		Path: "/metadata/annotations",
-		//		Value: map[string]string{
-		//			key: value,
-		//		},
-		//	})
-		//} else {
-		//	patch = append(patch, patchOperation{
-		//		Op:    "replace",
-		//		Path:  "/metadata/annotations/" + key,
-		//		Value: value,
-		//	})
-		//}
+		} else {
+			for key,value := range added{
+				target[key]=value
+			}
+			patch = append(patch, patchOperation{
+				Op:    "replace",
+				Path:  "/metadata/annotations",
+				Value: target,
+			})
+		}
 
-	}
+	//}
 	return
 }
 
@@ -265,7 +266,7 @@ func mutationRequired(meta *metav1.ObjectMeta) bool {
 		required = false
 	}
 
-	klog.Infof("mutation policy for %s/%s ,required %v", meta.Name, meta.Namespace, required)
+	klog.Infof("mutation policy for %s/%s ,required %v", meta.GetName(), meta.GetNamespace(), required)
 
 	return required
 

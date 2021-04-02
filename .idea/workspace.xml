@@ -17,11 +17,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3650abcf-ebd4-41ac-bf8a-b16958737726" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/deploy-test/create-ca.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy-test/csr.cnf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/02-svc.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/02-svc.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/04-mutate.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/04-mutate.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pkg/webhook.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/webhook.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
